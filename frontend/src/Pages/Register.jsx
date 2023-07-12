@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../Redux/Auth/action";
 import { FiUser } from "react-icons/fi";
 import { MdOutlineMail } from "react-icons/md";
-import { GoLock } from "react-icons/go";
-import { GoUnlock } from "react-icons/go";
+import { GoLock, GoUnlock } from "react-icons/go";
 import { FcGoogle } from "react-icons/fc";
 import { BsGithub } from "react-icons/bs";
 import styled from "styled-components";
@@ -18,6 +19,9 @@ const Register = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [passType, setPassType] = useState("password");
+
+  const { isLoading, isError, res } = useSelector((store) => store.AuthReducer);
+  const dispatch = useDispatch();
 
   const handleRegister = () => {
     navigate("/register");
@@ -45,9 +49,10 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (name && email && password && image) {
-      const payload = { name, email, password, image };
-      console.log('payload: ', payload);
+    if (image && name && email && password) {
+      const payload = { image, name, email, password };
+      dispatch(register(payload));
+      // console.log('payload: ', payload);
     } else {
       alert('All fields are required');
     }
@@ -55,6 +60,10 @@ const Register = () => {
 
   return (
     <Main>
+
+      { isLoading ? <h2>Loading...</h2> : <div></div> }
+      { isError ? <h2>something went wrong</h2> : <div></div>}
+
       <AuthDiv>
         <RegisterBtn onClick={handleRegister} color="white">Register</RegisterBtn>
         <LoginBtn onClick={handleLogin}>Log in</LoginBtn>

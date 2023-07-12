@@ -3,7 +3,7 @@ import * as types from "./actionTypes";
 const initState = {
     isLoading: false,
     isError: false,
-    register: ''
+    res: ''
 };
 
 // action = { type, payload };
@@ -20,7 +20,7 @@ const reducer = (state = initState, { type, payload }) => {
             return {
                 ...state,
                 isLoading: false,
-                register: payload
+                res: payload.data
             }
         case types.REGISTER_POST_FAILURE:
             return {
